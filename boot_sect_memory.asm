@@ -35,7 +35,7 @@ int 0x10
 ; every time we change the code
 mov al, "4"
 int 0x10
-mov al, [0x7c2d]
+mov al, [0x7c00 + 0x2d]
 int 0x10
 
 
