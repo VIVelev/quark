@@ -1,25 +1,25 @@
-print:
+print_string:
     pusha
 
 ; keep this in mind:
 ; while (string[i] != 0) { print string[i]; i++ }
 
-start:
+print_string_loop:
     mov al, [bx]
     cmp al, 0
-    je done
+    je print_string_done
 
     mov ah, 0x0e
     int 0x10
 
     add bx, 1
-    jmp start
+    jmp print_string_loop
 
-done:
+print_string_done:
     popa
     ret
 
-println:
+print_nl:
     pusha
 
     mov ah, 0x0e

@@ -6,25 +6,26 @@ KERNEL_OFFSET equ 0x1000 ; The same one we used when linking the kernel
     mov sp, bp
 
     mov bx, MSG_REAL_MODE 
-    call print
-    call println
+    call print_string
+    call print_nl
 
     call load_kernel ; read the kernel from disk
     call switch_to_pm ; disable interrupts, load GDT,  etc. Finally jumps to 'BEGIN_PM'
     jmp $ ; Never executed
 
-%include "boot_sect_print.asm"
-%include "boot_sect_print_hex.asm"
-%include "boot_sect_disk.asm"
-%include "32bit-gdt.asm"
-%include "32bit-print.asm"
-%include "32bit-switch.asm"
+%include "../print/print_hex.asm"
+%include "../print/print_string.asm"
+%include "../disk/disk_load.asm"
+
+%include "../32bit_pm/gdt.asm"
+%include "../32bit_pm/print_string_pm.asm"
+%include "../32bit_pm/switch_to_pm.asm"
 
 [bits 16]
 load_kernel:
     mov bx, MSG_LOAD_KERNEL
-    call print
-    call println
+    call print_string
+    call print_nl
 
     mov bx, KERNEL_OFFSET ; Read from disk and store in 0x1000
     mov dh, 2
@@ -40,10 +41,10 @@ BEGIN_PM:
     jmp $ ; Stay here when the kernel returns control to us (if ever)
 
 
-BOOT_DRIVE db 0 ; It is a good idea to store it in memory because 'dl' may get overwritten
-MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
-MSG_PROT_MODE db "Landed in 32-bit Protected Mode", 0
-MSG_LOAD_KERNEL db "Loading kernel into memory", 0
+BOOT_DRIVE: db 0 ; It is a good idea to store it in memory because 'dl' may get overwritten
+MSG_REAL_MODE: db "Started in 16-bit Real Mode", 0
+MSG_PROT_MODE: db "Landed in 32-bit Protected Mode", 0
+MSG_LOAD_KERNEL: db "Loading kernel into memory", 0
 
 ; padding
 times 510 - ($-$$) db 0
