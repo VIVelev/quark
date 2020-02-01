@@ -1,7 +1,9 @@
 #ifndef UTILS_H
     #define UTILS_H
 
-    void memory_copy(unsigned char *source, unsigned char *destination, unsigned int nbytes);
-    void int_to_ascii(int n, char str[]);
+    #include "../cpu/types.h"
+
+    void memory_copy(uint8_t *source, uint8_t *destination, uint32_t nbytes);
+    void int_to_ascii(sint32_t n, char str[]);
 
 #endif /* UTILS_H */

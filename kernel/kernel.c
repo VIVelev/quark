@@ -1,11 +1,10 @@
 #include "../drivers/screen.h"
-#include "utils.h"
 
 void main() {
     clear_screen();
 
     // Fill up the screen
-    int i = 0;
+    uint8_t i = 0;
     for (i = 0; i < 24; i++) {
         char str[255];
         int_to_ascii(i, str);

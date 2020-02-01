@@ -1,6 +1,9 @@
 #ifndef SCREEN_H
     #define SCREEN_H
 
+    #include "../kernel/utils.h"
+    #include "ports.h"
+
     #define VIDEO_MEMORY_ADDRESS 0xb8000
     #define MAX_ROWS 25
     #define MAX_COLS 80
@@ -14,7 +17,7 @@
     #define CURSOR_LOW_BYTE_DATA 15
 
     /* Public Kernel functions */
-    void kprint_at(char *message, int row, int col);
+    void kprint_at(char *message, uint32_t row, uint32_t col);
     void kprint(char *message);
     void clear_screen();
 

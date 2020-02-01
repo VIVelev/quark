@@ -1,14 +1,12 @@
 #include "screen.h"
-#include "ports.h"
-#include "../kernel/utils.h"
 
 // Declaration of Private Kernel functions
-int print_char(char ch, int row, int col, char attr);
-int get_cursor_offset();
-void set_cursor_offset(int offset);
-int get_cursor_offset_on(int row, int col);
-int get_cursor_offset_row(int offset);
-int get_cursor_offset_col(int offset);
+uint32_t print_char(char ch, uint32_t row, uint32_t col, uint8_t attr);
+uint32_t get_cursor_offset();
+void set_cursor_offset(uint32_t offset);
+uint32_t get_cursor_offset_on(uint32_t row, uint32_t col);
+uint32_t get_cursor_offset_row(uint32_t offset);
+uint32_t get_cursor_offset_col(uint32_t offset);
 
 /****************************************************************
  * Public Kernel functions                                      *
@@ -23,8 +21,8 @@ int get_cursor_offset_col(int offset);
  * @param row integer
  * @param col integer
  */ 
-void kprint_at(char *message, int row, int col) {
-    int offset, i = 0;
+void kprint_at(char *message, uint32_t row, uint32_t col) {
+    uint32_t offset, i = 0;
     while (message[i] != '\0') {
         offset = print_char(message[i++], row, col, WHITE_ON_BLACK);
         row = get_cursor_offset_row(offset);
@@ -40,15 +38,20 @@ void kprint_at(char *message, int row, int col) {
  * @param message string to print
  */
 void kprint(char *message) {
-    kprint_at(message, -1, -1);
+    uint32_t offset, row, col;
+    offset = get_cursor_offset();
+    row = get_cursor_offset_row(offset);
+    col = get_cursor_offset_col(offset);
+
+    kprint_at(message, row, col);
 }
 
 /**
  * Screen cleaning utility function.
  */
 void clear_screen() {
-    int i, screen_size = MAX_ROWS * MAX_COLS;
-    unsigned char *vidmem = (unsigned char *) VIDEO_MEMORY_ADDRESS;
+    uint32_t i, screen_size = MAX_ROWS * MAX_COLS;
+    uint8_t *vidmem = (uint8_t *) VIDEO_MEMORY_ADDRESS;
 
     for (i = 0; i < screen_size; i++) {
         vidmem[2*i] = ' ';
@@ -73,8 +76,8 @@ void clear_screen() {
  * 
  * @returns the offset of the next character
  */
-int print_char(char ch, int row, int col, char attr) {
-    unsigned char *vidmem = (unsigned char *) VIDEO_MEMORY_ADDRESS;
+uint32_t print_char(char ch, uint32_t row, uint32_t col, uint8_t attr) {
+    uint8_t *vidmem = (uint8_t *) VIDEO_MEMORY_ADDRESS;
     if (!attr)
         attr = WHITE_ON_BLACK;
 
@@ -85,12 +88,7 @@ int print_char(char ch, int row, int col, char attr) {
         return get_cursor_offset_on(row, col);
     }
 
-    int offset;
-    if (row >= 0 && col >= 0)
-        offset = get_cursor_offset_on(row, col);
-    else
-        offset = get_cursor_offset();
-
+    uint32_t offset = get_cursor_offset_on(row, col);
     if (ch == '\n') {
         row = get_cursor_offset_row(offset);
         offset = get_cursor_offset_on(row + 1, 0);
@@ -103,7 +101,7 @@ int print_char(char ch, int row, int col, char attr) {
 
     // Check if the offset is over screen size. If it is => scroll
     if (offset >= 2 * MAX_ROWS * MAX_COLS) {
-        int i;
+        uint32_t i;
 
         // Scroll
         for (i = 1; i < MAX_ROWS;  i++)
@@ -112,7 +110,7 @@ int print_char(char ch, int row, int col, char attr) {
                         2 * MAX_COLS);
 
         // The new last line is blank
-        unsigned char *last_line = vidmem + get_cursor_offset_on(MAX_ROWS - 1, 0);
+        uint8_t *last_line = vidmem + get_cursor_offset_on(MAX_ROWS - 1, 0);
         for (i = 0; i < 2 * MAX_COLS; i++)
             last_line[i] = '\0';
 
@@ -129,11 +127,11 @@ int print_char(char ch, int row, int col, char attr) {
  * 1. Ask for high byte of the cursor offset.
  * 2. Ask for low byte.
  */
-int get_cursor_offset() {
+uint32_t get_cursor_offset() {
 
     // 1. Ask for high byte of the cursor offset.
     port_byte_out(REG_SCREEN_CTRL, CURSOR_HIGH_BYTE_DATA);
-    int offset = port_byte_in(REG_SCREEN_DATA) << 8;
+    uint32_t offset = port_byte_in(REG_SCREEN_DATA) << 8;
 
     // 2. Ask for low byte.
     port_byte_out(REG_SCREEN_CTRL, CURSOR_LOW_BYTE_DATA);
@@ -153,27 +151,27 @@ int get_cursor_offset() {
  * 
  * @param offset
  */
-void set_cursor_offset(int offset) {
+void set_cursor_offset(uint32_t offset) {
     // Convert from cell offset to char offset.
     offset /= 2;
 
     // 1. Set high byte of the cursor offset.
     port_byte_out(REG_SCREEN_CTRL, CURSOR_HIGH_BYTE_DATA);
-    port_byte_out(REG_SCREEN_DATA, (unsigned char)(offset >> 8));
+    port_byte_out(REG_SCREEN_DATA, (uint8_t)(offset >> 8));
 
     // 2. Set low byte.
     port_byte_out(REG_SCREEN_CTRL, CURSOR_LOW_BYTE_DATA);
-    port_byte_out(REG_SCREEN_DATA, (unsigned char)(offset & 0xff));
+    port_byte_out(REG_SCREEN_DATA, (uint8_t)(offset & 0xff));
 }
 
-int get_cursor_offset_on(int row, int col) {
+uint32_t get_cursor_offset_on(uint32_t row, uint32_t col) {
     return 2 * (row * MAX_COLS + col);
 }
 
-int get_cursor_offset_row(int offset) {
+uint32_t get_cursor_offset_row(uint32_t offset) {
     return offset / (2 * MAX_COLS);
 }
 
-int get_cursor_offset_col(int offset) {
+uint32_t get_cursor_offset_col(uint32_t offset) {
     return (offset - 2 * MAX_COLS * get_cursor_offset_row(offset)) / 2;
 }

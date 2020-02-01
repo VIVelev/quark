@@ -8,8 +8,8 @@
  * @param destination pointer
  * @param nbytes integer, number of bytes
  */
-void memory_copy(unsigned char *source, unsigned char *destination, unsigned int nbytes) {
-    for (int i = 0; i < nbytes; i++)
+void memory_copy(uint8_t *source, uint8_t *destination, uint32_t nbytes) {
+    for (uint32_t i = 0; i < nbytes; i++)
         destination[i] = source[i];
 }
 
@@ -19,12 +19,12 @@ void memory_copy(unsigned char *source, unsigned char *destination, unsigned int
  * @param n integer
  * @param str string, destination
  */
-void int_to_ascii(int n, char str[]) {
-    int i = 0, sign = n;
-
+void int_to_ascii(sint32_t n, char str[]) {
+    sint32_t sign = n;
     if (sign < 0)
         n = -n;
 
+    uint16_t i = 0;
     do {
         str[i++] = n % 10 + '0';
         n /= 10;
