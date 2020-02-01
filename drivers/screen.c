@@ -1,11 +1,12 @@
 #include "screen.h"
 #include "ports.h"
+#include "../kernel/utils.h"
 
 // Declaration of Private Kernel functions
 int print_char(char ch, int row, int col, char attr);
 int get_cursor_offset();
 void set_cursor_offset(int offset);
-int get_cursor_offset_from(int row, int col);
+int get_cursor_offset_on(int row, int col);
 int get_cursor_offset_row(int offset);
 int get_cursor_offset_col(int offset);
 
@@ -54,7 +55,7 @@ void clear_screen() {
         vidmem[2*i + 1] = WHITE_ON_BLACK;
     }
 
-    set_cursor_offset(get_cursor_offset_from(0, 0));
+    set_cursor_offset(get_cursor_offset_on(0, 0));
 }
 
 /****************************************************************
@@ -81,23 +82,41 @@ int print_char(char ch, int row, int col, char attr) {
     if (row >= MAX_ROWS || col >= MAX_COLS) {
         vidmem[2 * MAX_ROWS*MAX_COLS - 2] = 'E';
         vidmem[2 * MAX_ROWS*MAX_COLS - 1] = RED_ON_WHITE;
-        return get_cursor_offset_from(row, col);
+        return get_cursor_offset_on(row, col);
     }
 
     int offset;
     if (row >= 0 && col >= 0)
-        offset = get_cursor_offset_from(row, col);
+        offset = get_cursor_offset_on(row, col);
     else
         offset = get_cursor_offset();
 
     if (ch == '\n') {
         row = get_cursor_offset_row(offset);
-        offset = get_cursor_offset_from(row + 1, 0);
+        offset = get_cursor_offset_on(row + 1, 0);
 
     }else {
         vidmem[offset] = ch;
         vidmem[offset+1] = attr;
         offset += 2;
+    }
+
+    // Check if the offset is over screen size. If it is => scroll
+    if (offset >= 2 * MAX_ROWS * MAX_COLS) {
+        int i;
+
+        // Scroll
+        for (i = 1; i < MAX_ROWS;  i++)
+            memory_copy(vidmem + get_cursor_offset_on(i, 0),
+                        vidmem + get_cursor_offset_on(i-1, 0),
+                        2 * MAX_COLS);
+
+        // The new last line is blank
+        unsigned char *last_line = vidmem + get_cursor_offset_on(MAX_ROWS - 1, 0);
+        for (i = 0; i < 2 * MAX_COLS; i++)
+            last_line[i] = '\0';
+
+        offset -= 2 * MAX_COLS;
     }
 
     set_cursor_offset(offset);
@@ -147,7 +166,7 @@ void set_cursor_offset(int offset) {
     port_byte_out(REG_SCREEN_DATA, (unsigned char)(offset & 0xff));
 }
 
-int get_cursor_offset_from(int row, int col) {
+int get_cursor_offset_on(int row, int col) {
     return 2 * (row * MAX_COLS + col);
 }
 
