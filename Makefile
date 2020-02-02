@@ -18,11 +18,11 @@ HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
 OBJ = $(C_SOURCES:.c=.o cpu/interrupt.o)
 
 
-run: os-image.bin
-	$(EMU) --drive file=$<,format=$(FORMAT),if=$(INTERFACE)
-
 os-image.bin: boot/bootsect.bin kernel.bin
 	cat $^ > $@
+
+run: os-image.bin
+	$(EMU) --drive file=$<,format=$(FORMAT),if=$(INTERFACE)
 
 kernel.bin: boot/kernel_entry.o $(OBJ)
 	$(LD) $^ --Ttext $(KERNEL_OFFSET) --oformat binary -o $@
