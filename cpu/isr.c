@@ -1,6 +1,8 @@
 #include "isr.h"
+#include "irq.h"
+#include "../drivers/screen.h"
 
-void setup_isr() {
+void install_isr() {
     set_idt_gate(0, (uint32_t) isr0);
     set_idt_gate(1, (uint32_t) isr1);
     set_idt_gate(2, (uint32_t) isr2);
@@ -34,12 +36,49 @@ void setup_isr() {
     set_idt_gate(30, (uint32_t) isr30);
     set_idt_gate(31, (uint32_t) isr31);
 
+    install_irq();
+
     set_idt();  /* Load with ASM */
 }
 
 void register_interrupt_handler(uint8_t index, isr_t handler) {
     interrupt_handlers[index] = handler;
 }
+
+char *EXCEPTION_MESSAGES[] = {
+    "Division By Zero",
+    "Debug",
+    "Non Maskable Interrupt",
+    "Breakpoint",
+    "Into Detected Overflow",
+    "Out of Bounds",
+    "Invalid Opcode",
+    "No Coprocessor",
+    "Double Fault",
+    "Coprocessor Segment Overrun",
+    "Bad TSS",
+    "Segment Not Present",
+    "Stack Fault",
+    "General Protection Fault",
+    "Page Fault",
+    "Unknown Interrupt",
+    "Coprocessor Fault",
+    "Alignment Check",
+    "Machine Check",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved",
+    "Reserved"
+};
 
 void _isr_handler(registers_t r) {
     kprint("Received interrupt: ");
