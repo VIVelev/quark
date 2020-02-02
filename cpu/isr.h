@@ -1,18 +1,7 @@
 #ifndef ISR_H
     #define ISR_H  /* ISR stands for "Interrupt Service Routine" */
 
-    #include "idt.h"
-
-    /* Struct which aggregates many registers */
-    typedef struct {
-        uint32_t ds;  /* Data segment selector */
-        uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* Pushed by pusha */
-        uint32_t int_no, err_code;  /* Interrupt number and error code (if applicable) */
-        uint32_t eip, cs, eflags, useresp, ss;  /* Pushed by the processor automatically */
-    } registers_t;
-
-    /* ISR Handler function type */
-    typedef void (*isr_t)(registers_t);
+    #include "interrupt_handling.h"
 
     /* ISRs reserved for CPU exceptions */
     extern void isr0();
@@ -50,10 +39,5 @@
 
     void install_isr();
     void handle_isr(registers_t r);
-
-    isr_t interrupt_handlers[IDT_ENTRIES];
-    void register_interrupt_handler(uint8_t index, isr_t handler);
-
-    void handle_interrupt(registers_t r);
 
 #endif /* ISR_H */

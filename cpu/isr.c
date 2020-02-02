@@ -1,5 +1,4 @@
 #include "isr.h"
-#include "irq.h"
 #include "../drivers/screen.h"
 
 void install_isr() {
@@ -35,10 +34,6 @@ void install_isr() {
     set_idt_gate(29, (uint32_t) isr29);
     set_idt_gate(30, (uint32_t) isr30);
     set_idt_gate(31, (uint32_t) isr31);
-
-    install_irq();
-
-    set_idt();  /* Load with ASM */
 }
 
 char *EXCEPTION_MESSAGES[] = {
@@ -86,20 +81,4 @@ void handle_isr(registers_t r) {
     kprint("\n");
     kprint(EXCEPTION_MESSAGES[r.int_no]);
     kprint("\n");
-}
-
-void register_interrupt_handler(uint8_t index, isr_t handler) {
-    interrupt_handlers[index] = handler;
-}
-
-/**
- * Public Interrupt Handler method.
- * 
- * @param r accumulated registers
- */
-void handle_interrupt(registers_t r) {
-    if (r.int_no < 32)
-        handle_isr(r);
-    else
-        handle_irq(r);
 }
