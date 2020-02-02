@@ -2,7 +2,7 @@ CC = i386-elf-gcc
 LD = i386-elf-ld
 GDB = i386-elf-gdb
 # -g: Use debugging symbols in gcc
-CFLAGS = -Wall -pedantic -ffreestanding -g
+CFLAGS = -Wall -pedantic -std=c11 -ffreestanding -g
 
 ASM = nasm
 DISASM = ndisasm
