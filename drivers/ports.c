@@ -6,8 +6,10 @@
  * @param port the specified port
  */
 uint8_t port_byte_in(uint16_t port) {
-    // "=a" ( result ) means : put AL register in variable RESULT when finished
-    // "d" ( port ) means : load EDX with port
+    /**
+     * "=a" ( result ) means : put AL register in variable RESULT when finished
+     * "d" ( port ) means : load EDX with port
+     */
     uint8_t result;
     __asm__("in %%dx, %%al" : "=a" (result) : "d" (port));
     return result;
@@ -20,8 +22,10 @@ uint8_t port_byte_in(uint16_t port) {
  * @param data the byte to write
  */
 void port_byte_out(uint16_t port, uint8_t data) {
-    // "a" ( data ) means : load EAX with data
-    // "d" ( port ) means : load EDX with port
+    /**
+     * "a" ( data ) means : load EAX with data
+     * "d" ( port ) means : load EDX with port
+     */
     __asm__("out %%al, %%dx" : : "a" (data), "d" (port));
 }
 

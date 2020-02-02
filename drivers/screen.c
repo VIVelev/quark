@@ -1,6 +1,6 @@
 #include "screen.h"
 
-// Declaration of Private Kernel functions
+/* Declaration of Private Kernel functions */
 uint32_t print_char(char ch, uint32_t row, uint32_t col, uint8_t attr);
 uint32_t get_cursor_offset();
 void set_cursor_offset(uint32_t offset);
@@ -81,7 +81,7 @@ uint32_t print_char(char ch, uint32_t row, uint32_t col, uint8_t attr) {
     if (!attr)
         attr = WHITE_ON_BLACK;
 
-    // Print a red 'E' if the coords are out of bounds.
+    /* Print a red 'E' if the coords are out of bounds. */
     if (row >= MAX_ROWS || col >= MAX_COLS) {
         vidmem[2 * MAX_ROWS*MAX_COLS - 2] = 'E';
         vidmem[2 * MAX_ROWS*MAX_COLS - 1] = RED_ON_WHITE;
@@ -99,17 +99,17 @@ uint32_t print_char(char ch, uint32_t row, uint32_t col, uint8_t attr) {
         offset += 2;
     }
 
-    // Check if the offset is over screen size. If it is => scroll
+    /* Check if the offset is over the screen size. If it is, then scroll. */
     if (offset >= 2 * MAX_ROWS * MAX_COLS) {
         uint32_t i;
 
-        // Scroll
+        /* Scroll */
         for (i = 1; i < MAX_ROWS;  i++)
             memory_copy(vidmem + get_cursor_offset_on(i, 0),
                         vidmem + get_cursor_offset_on(i-1, 0),
                         2 * MAX_COLS);
 
-        // The new last line is blank
+        /* The new, last line, is blank */
         uint8_t *last_line = vidmem + get_cursor_offset_on(MAX_ROWS - 1, 0);
         for (i = 0; i < 2 * MAX_COLS; i++)
             last_line[i] = '\0';
@@ -129,17 +129,19 @@ uint32_t print_char(char ch, uint32_t row, uint32_t col, uint8_t attr) {
  */
 uint32_t get_cursor_offset() {
 
-    // 1. Ask for high byte of the cursor offset.
+    /* 1. Ask for high byte of the cursor offset. */
     port_byte_out(REG_SCREEN_CTRL, CURSOR_HIGH_BYTE_DATA);
     uint32_t offset = port_byte_in(REG_SCREEN_DATA) << 8;
 
-    // 2. Ask for low byte.
+    /* 2. Ask for low byte. */
     port_byte_out(REG_SCREEN_CTRL, CURSOR_LOW_BYTE_DATA);
     offset += port_byte_in(REG_SCREEN_DATA);
 
-    // Since the cursor offset reported by the VGA hardware is the
-    // number of characters, we multiply by two to convert it to
-    // a character cell offset.
+    /**
+     * Since the cursor offset reported by the VGA hardware is the
+     * number of characters, we multiply by two to convert it to
+     * a character cell offset.
+     */
     return offset * 2;
 }
 
@@ -152,14 +154,14 @@ uint32_t get_cursor_offset() {
  * @param offset
  */
 void set_cursor_offset(uint32_t offset) {
-    // Convert from cell offset to char offset.
+    /* Convert from cell offset to char offset. */
     offset /= 2;
 
-    // 1. Set high byte of the cursor offset.
+    /* 1. Set high byte of the cursor offset. */
     port_byte_out(REG_SCREEN_CTRL, CURSOR_HIGH_BYTE_DATA);
     port_byte_out(REG_SCREEN_DATA, (uint8_t)(offset >> 8));
 
-    // 2. Set low byte.
+    /* 2. Set low byte. */
     port_byte_out(REG_SCREEN_CTRL, CURSOR_LOW_BYTE_DATA);
     port_byte_out(REG_SCREEN_DATA, (uint8_t)(offset & 0xff));
 }
