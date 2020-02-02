@@ -1,10 +1,10 @@
 #ifndef ISR_H
-    #define ISR_H    // ISR stands for "Interrupt Service Routine"
+    #define ISR_H  /* ISR stands for "Interrupt Service Routine" */
 
     #include "../drivers/screen.h"
     #include "idt.h"
 
-    // ISRs reserved for CPU exceptions
+    /* ISRs reserved for CPU exceptions */
     extern void isr0();
     extern void isr1();
     extern void isr2();
@@ -38,12 +38,12 @@
     extern void isr30();
     extern void isr31();
 
-    // Struct which aggregates many registers
+    /* Struct which aggregates many registers */
     typedef struct {
-        uint32_t ds;                                     // Data segment selector
-        uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax; // Pushed by pusha
-        uint32_t int_no, err_code;                       // Interrupt number and error code (if applicable)
-        uint32_t eip, cs, eflags, useresp, ss;           // Pushed by the processor automatically
+        uint32_t ds;  /* Data segment selector */
+        uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* Pushed by pusha */
+        uint32_t int_no, err_code;  /* Interrupt number and error code (if applicable) */
+        uint32_t eip, cs, eflags, useresp, ss;  /* Pushed by the processor automatically */
     } registers_t;
 
     void isr_install();

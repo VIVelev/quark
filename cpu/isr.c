@@ -34,7 +34,7 @@ void isr_install() {
     set_idt_gate(30, (uint32_t) isr30);
     set_idt_gate(31, (uint32_t) isr31);
 
-    set_idt(); // Load with ASM
+    set_idt();  /* Load with ASM */
 }
 
 char *exception_messages[] = {
