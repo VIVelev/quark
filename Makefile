@@ -13,9 +13,9 @@ INTERFACE = floppy
 
 KERNEL_OFFSET = 0x1000
 
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h)
-OBJ = $(C_SOURCES:.c=.o)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
+OBJ = $(C_SOURCES:.c=.o cpu/interrupt.o)
 
 
 run: os-image.bin
@@ -28,7 +28,7 @@ kernel.bin: boot/kernel_entry.o $(OBJ)
 	$(LD) $^ --Ttext $(KERNEL_OFFSET) --oformat binary -o $@
 
 # Used for debugging purposes
-kernel.elf: boot/kernel_entry.o ${OBJ}
+kernel.elf: boot/kernel_entry.o $(OBJ)
 	$(LD) $^ --Ttext $(KERNEL_OFFSET) -o $@
 
 # Open the connection to qemu and load our kernel-object file with symbols
@@ -38,7 +38,7 @@ debug: os-image.bin kernel.elf
 
 # Rule to disassemble the kernel - may be useful to debug
 kernel.dis: kernel.bin
-	ndisasm -b 32 $< > $@
+	$(DISASM) -b 32 $< > $@
 
 # Generic rules for wildcards
 # To make an object, always compile from its .c
