@@ -1,8 +1,18 @@
 #ifndef ISR_H
     #define ISR_H  /* ISR stands for "Interrupt Service Routine" */
 
-    #include "../drivers/screen.h"
     #include "idt.h"
+
+    /* Struct which aggregates many registers */
+    typedef struct {
+        uint32_t ds;  /* Data segment selector */
+        uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* Pushed by pusha */
+        uint32_t int_no, err_code;  /* Interrupt number and error code (if applicable) */
+        uint32_t eip, cs, eflags, useresp, ss;  /* Pushed by the processor automatically */
+    } registers_t;
+
+    /* ISR Handler function type */
+    typedef void (*isr_t)(registers_t);
 
     /* ISRs reserved for CPU exceptions */
     extern void isr0();
@@ -38,15 +48,51 @@
     extern void isr30();
     extern void isr31();
 
-    /* Struct which aggregates many registers */
-    typedef struct {
-        uint32_t ds;  /* Data segment selector */
-        uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* Pushed by pusha */
-        uint32_t int_no, err_code;  /* Interrupt number and error code (if applicable) */
-        uint32_t eip, cs, eflags, useresp, ss;  /* Pushed by the processor automatically */
-    } registers_t;
+    const char *EXCEPTION_MESSAGES[] = {
+        "Division By Zero",
+        "Debug",
+        "Non Maskable Interrupt",
+        "Breakpoint",
+        "Into Detected Overflow",
+        "Out of Bounds",
+        "Invalid Opcode",
+        "No Coprocessor",
 
-    void isr_install();
-    void isr_handler(registers_t r);
+        "Double Fault",
+        "Coprocessor Segment Overrun",
+        "Bad TSS",
+        "Segment Not Present",
+        "Stack Fault",
+        "General Protection Fault",
+        "Page Fault",
+        "Unknown Interrupt",
+
+        "Coprocessor Fault",
+        "Alignment Check",
+        "Machine Check",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Reserved"
+    };
+
+    void setup_isr();
+
+    isr_t interrupt_handlers[IDT_ENTRIES];
+    void register_interrupt_handler(uint8_t index, isr_t handler);
+
+    void _isr_handler(registers_t r);
+    void _irq_handler(registers_t r);
+    void handle_interrupt(registers_t r);
 
 #endif /* ISR_H */

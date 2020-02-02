@@ -1,7 +1,7 @@
 #ifndef IDT_H
     #define IDT_H  /* IDT stands for "Interrupt Descriptor Table" */
 
-    #include "../kernel/utils.h"
+    #include "types.h"
 
     /* Kernel Code Segmentation */
     #define KERNEL_CS 0x08

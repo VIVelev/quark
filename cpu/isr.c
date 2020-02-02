@@ -1,6 +1,6 @@
 #include "isr.h"
 
-void isr_install() {
+void setup_isr() {
     set_idt_gate(0, (uint32_t) isr0);
     set_idt_gate(1, (uint32_t) isr1);
     set_idt_gate(2, (uint32_t) isr2);
@@ -37,52 +37,43 @@ void isr_install() {
     set_idt();  /* Load with ASM */
 }
 
-char *exception_messages[] = {
-    "Division By Zero",
-    "Debug",
-    "Non Maskable Interrupt",
-    "Breakpoint",
-    "Into Detected Overflow",
-    "Out of Bounds",
-    "Invalid Opcode",
-    "No Coprocessor",
+void register_interrupt_handler(uint8_t index, isr_t handler) {
+    interrupt_handlers[index] = handler;
+}
 
-    "Double Fault",
-    "Coprocessor Segment Overrun",
-    "Bad TSS",
-    "Segment Not Present",
-    "Stack Fault",
-    "General Protection Fault",
-    "Page Fault",
-    "Unknown Interrupt",
-
-    "Coprocessor Fault",
-    "Alignment Check",
-    "Machine Check",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved"
-};
-
-void isr_handler(registers_t r) {
-    kprint("received interrupt: ");
+void _isr_handler(registers_t r) {
+    kprint("Received interrupt: ");
 
     char s[3];
     int_to_ascii(r.int_no, s);
     kprint(s);
 
     kprint("\n");
-    kprint(exception_messages[r.int_no]);
+    kprint(EXCEPTION_MESSAGES[r.int_no]);
     kprint("\n");
+}
+
+void _irq_handler(registers_t r) {
+    /**
+     * After every interrupt we need to send an EOI to the PICs
+     * or they will not send another interrupt again.
+     */
+    if (r.int_no >= 40)
+        port_byte_out(0xA0, 0x20);  /* slave */
+    port_byte_out(0x20, 0x20);  /* master */
+
+    if (interrupt_handlers[r.int_no] != 0)
+        interrupt_handlers[r.int_no](r);
+}
+
+/**
+ * Public Interrupt Handler method.
+ * 
+ * @param r accumulated registers
+ */
+void handle_interrupt(registers_t r) {
+    if (r.int_no < 32)
+        _isr_handler(r);
+    else
+        _irq_handler(r);
 }
