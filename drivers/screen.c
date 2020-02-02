@@ -1,4 +1,6 @@
 #include "screen.h"
+#include "ports.h"
+#include "../kernel/utils.h"
 
 /* Declaration of Private Kernel functions */
 uint32_t print_char(char ch, uint32_t row, uint32_t col, uint8_t attr);

@@ -1,8 +1,7 @@
 #ifndef SCREEN_H
     #define SCREEN_H
 
-    #include "../kernel/utils.h"
-    #include "ports.h"
+    #include "../cpu/types.h"
 
     #define VIDEO_MEMORY_ADDRESS 0xb8000
     #define MAX_ROWS 25
