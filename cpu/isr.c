@@ -41,10 +41,6 @@ void install_isr() {
     set_idt();  /* Load with ASM */
 }
 
-void register_interrupt_handler(uint8_t index, isr_t handler) {
-    interrupt_handlers[index] = handler;
-}
-
 char *EXCEPTION_MESSAGES[] = {
     "Division By Zero",
     "Debug",
@@ -80,7 +76,7 @@ char *EXCEPTION_MESSAGES[] = {
     "Reserved"
 };
 
-void _isr_handler(registers_t r) {
+void handle_isr(registers_t r) {
     kprint("Received interrupt: ");
 
     char s[3];
@@ -92,17 +88,8 @@ void _isr_handler(registers_t r) {
     kprint("\n");
 }
 
-void _irq_handler(registers_t r) {
-    /**
-     * After every interrupt we need to send an EOI to the PICs
-     * or they will not send another interrupt again.
-     */
-    if (r.int_no >= 40)
-        port_byte_out(0xA0, 0x20);  /* slave */
-    port_byte_out(0x20, 0x20);  /* master */
-
-    if (interrupt_handlers[r.int_no] != 0)
-        interrupt_handlers[r.int_no](r);
+void register_interrupt_handler(uint8_t index, isr_t handler) {
+    interrupt_handlers[index] = handler;
 }
 
 /**
@@ -112,7 +99,7 @@ void _irq_handler(registers_t r) {
  */
 void handle_interrupt(registers_t r) {
     if (r.int_no < 32)
-        _isr_handler(r);
+        handle_isr(r);
     else
-        _irq_handler(r);
+        handle_irq(r);
 }

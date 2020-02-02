@@ -49,12 +49,11 @@
     extern void isr31();
 
     void install_isr();
+    void handle_isr(registers_t r);
 
     isr_t interrupt_handlers[IDT_ENTRIES];
     void register_interrupt_handler(uint8_t index, isr_t handler);
 
-    void _isr_handler(registers_t r);
-    void _irq_handler(registers_t r);
     void handle_interrupt(registers_t r);
 
 #endif /* ISR_H */
