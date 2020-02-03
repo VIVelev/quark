@@ -38,6 +38,6 @@
     extern void isr31();
 
     void install_isr();
-    void handle_isr(registers_t r);
+    void handle_isr(registers_t *r);
 
 #endif /* ISR_H */

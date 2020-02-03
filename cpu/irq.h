@@ -45,6 +45,6 @@
     extern void irq15();
 
     void install_irq();
-    void handle_irq(registers_t r);
+    void handle_irq(registers_t *r);
 
 #endif /* IRQ_H */

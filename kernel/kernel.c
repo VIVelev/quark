@@ -1,10 +1,15 @@
 #include "kernel.h"
 #include "../cpu/interrupt_handling.h"
+#include "../cpu/timer.h"
 #include "../drivers/keyboard.h"
 
 void kmain() {
-    install_interrupt_handlers();
+    /* Enable interrupts */
     __asm__("sti");
+    /* Handle interrupts */
+    install_interrupt_handlers();
 
+    /* Init */
+    init_timer(100);
     init_keyboard();
 }

@@ -38,15 +38,15 @@ void install_irq() {
     set_idt_gate(47, (uint32_t) irq15);
 }
 
-void handle_irq(registers_t r) {
+void handle_irq(registers_t *r) {
     /**
      * After every interrupt we need to send an EOI to the PICs
      * or they will not send another interrupt again.
      */
-    if (r.int_no >= 40)
+    if (r->int_no >= 40)
         port_byte_out(REG_SLAVE_PIC_CTRL, 0x20);  /* slave */
     port_byte_out(REG_MASTER_PIC_CTRL, 0x20);  /* master */
 
-    if (interrupt_handlers[r.int_no] != 0)
-        interrupt_handlers[r.int_no](r);
+    if (interrupt_handlers[r->int_no] != 0)
+        interrupt_handlers[r->int_no](r);
 }
