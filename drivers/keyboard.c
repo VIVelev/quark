@@ -66,7 +66,7 @@ static void _keyboard_callback() {
 static void _print_user_input() {
     if (strcmp(key_buffer, "END") == 0) {
         kprint("Stopping the CPU. Bye!\n");
-        __asm__ volatile("hlt");
+        __asm__("hlt");
     }
 
     kprint("You said: ");
