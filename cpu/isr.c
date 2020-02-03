@@ -1,6 +1,6 @@
 #include "isr.h"
 #include "../drivers/screen.h"
-#include "../kernel/utils.h"
+#include "../libc/string.h"
 
 void install_isr() {
     set_idt_gate(0, (uint32_t) isr0);
@@ -75,9 +75,7 @@ char *EXCEPTION_MESSAGES[] = {
 void handle_isr(registers_t r) {
     kprint("Received interrupt: ");
 
-    char s[3];
-    int_to_ascii(r.int_no, s);
-    kprint(s);
+    kprint(itoa(r.int_no));
 
     kprint("\n");
     kprint(EXCEPTION_MESSAGES[r.int_no]);

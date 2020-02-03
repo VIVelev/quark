@@ -2,7 +2,7 @@
 #include "ports.h"
 #include "screen.h"
 #include "../cpu/irq.h"
-#include "../kernel/utils.h"
+#include "../libc/string.h"
 
 /* Declaration of Private Keyboard functions */
 void _print_letter(uint16_t scancode);
@@ -226,11 +226,8 @@ void _print_letter(uint16_t scancode) {
 static void _keyboard_callback() {
     uint8_t scancode = port_byte_in(REG_SCANCODE_DATA);
 
-    char sc_ascii[256];
-    int_to_ascii(scancode, sc_ascii);
-
     kprint("Keyboard scancode: ");
-    kprint(sc_ascii);
+    kprint(itoa(scancode));
     kprint(", ");
     _print_letter(scancode);
     kprint("\n");

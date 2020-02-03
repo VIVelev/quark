@@ -1,6 +1,6 @@
 #include "screen.h"
 #include "ports.h"
-#include "../kernel/utils.h"
+#include "../libc/mem.h"
 
 /* Declaration of Private Screen functions */
 uint32_t _print_char(char ch, uint32_t row, uint32_t col, uint8_t attr);
@@ -107,9 +107,9 @@ uint32_t _print_char(char ch, uint32_t row, uint32_t col, uint8_t attr) {
 
         /* Scroll */
         for (i = 1; i < MAX_ROWS;  i++)
-            memory_copy(vidmem + _get_cursor_offset_on(i, 0),
-                        vidmem + _get_cursor_offset_on(i-1, 0),
-                        2 * MAX_COLS);
+            memcpy(vidmem + _get_cursor_offset_on(i, 0),
+                   vidmem + _get_cursor_offset_on(i-1, 0),
+                   2 * MAX_COLS);
 
         /* The new, last line, is blank */
         uint8_t *last_line = vidmem + _get_cursor_offset_on(MAX_ROWS - 1, 0);

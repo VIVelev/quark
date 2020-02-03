@@ -14,8 +14,8 @@ INTERFACE = floppy
 
 KERNEL_OFFSET = 0x1000
 
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
+C_SOURCES = $(wildcard cpu/*.c drivers/*.c kernel/*.c libc/*.c)
+HEADERS = $(wildcard cpu/*.h drivers/*.h kernel/*.h libc/*.h)
 OBJ = $(C_SOURCES:.c=.o cpu/interrupt.o)
 
 

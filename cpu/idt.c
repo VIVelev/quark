@@ -1,5 +1,5 @@
 #include "idt.h"
-#include "../kernel/utils.h"
+#include "../libc/bitwise.h"
 
 void set_idt_gate(uint8_t index, uint32_t handler) {
     idt[index].low_offset = low_16(handler);
@@ -13,5 +13,5 @@ void set_idt() {
     idt_reg.limit = (uint16_t)(IDT_ENTRIES * sizeof(idt_gate_t) - 1);
     idt_reg.base = (uint32_t) &idt;
     /* Don't make the mistake of loading `&idt`, always load `&idt_reg`. */
-    __asm__ __volatile__("lidtl (%0)" : : "r" (&idt_reg));
+    __asm__ volatile ("lidtl (%0)" : : "r" (&idt_reg));
 }

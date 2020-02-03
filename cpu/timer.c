@@ -3,7 +3,7 @@
 #include "irq.h"
 #include "../drivers/ports.h"
 #include "../drivers/screen.h"
-#include "../kernel/utils.h"
+#include "../libc/string.h"
 
 /* Declaration of Private Timer functions */
 static void _timer_callback();
@@ -33,8 +33,6 @@ static void _timer_callback() {
     tick++;
 
     kprint("Tick: ");
-    char tick_ascii[256];
-    int_to_ascii(tick, tick_ascii);
-    kprint(tick_ascii);
+    kprint(itoa(tick));
     kprint("\n");
 }
