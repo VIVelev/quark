@@ -1,5 +1,5 @@
 #include "screen.h"
-#include "ports.h"
+#include "../cpu/ports.h"
 #include "../libc/mem.h"
 
 /* Declaration of Private Screen functions */
