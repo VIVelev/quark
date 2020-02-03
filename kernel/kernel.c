@@ -2,7 +2,7 @@
 #include "../cpu/interrupt_handling.h"
 #include "../drivers/keyboard.h"
 
-void main() {
+void kmain() {
     install_interrupt_handlers();
     __asm__("sti");
 
