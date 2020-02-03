@@ -5,8 +5,8 @@
 #include "../kernel/utils.h"
 
 /* Declaration of Private Keyboard functions */
-void _print_letter(uint8_t scancode);
-static void _keyboard_callback(registers_t r);
+void _print_letter(uint16_t scancode);
+static void _keyboard_callback();
 
 /****************************************************************
  * Public Keyboard functions                                    *
@@ -29,7 +29,7 @@ void init_keyboard() {
  * 
  * @param scancode
  */
-void _print_letter(uint8_t scancode) {
+void _print_letter(uint16_t scancode) {
     switch (scancode) {
         case 0x0:
             kprint("ERROR");
@@ -61,22 +61,22 @@ void _print_letter(uint8_t scancode) {
         case 0x9:
             kprint("8");
             break;
-        case 0x0A:
+        case 0x0a:
             kprint("9");
             break;
-        case 0x0B:
+        case 0x0b:
             kprint("0");
             break;
-        case 0x0C:
+        case 0x0c:
             kprint("-");
             break;
-        case 0x0D:
+        case 0x0d:
             kprint("+");
             break;
-        case 0x0E:
+        case 0x0e:
             kprint("Backspace");
             break;
-        case 0x0F:
+        case 0x0f:
             kprint("Tab");
             break;
         case 0x10:
@@ -109,22 +109,22 @@ void _print_letter(uint8_t scancode) {
         case 0x19:
             kprint("P");
             break;
-		case 0x1A:
+		case 0x1a:
 			kprint("[");
 			break;
-		case 0x1B:
+		case 0x1b:
 			kprint("]");
 			break;
-		case 0x1C:
+		case 0x1c:
 			kprint("ENTER");
 			break;
-		case 0x1D:
+		case 0x1d:
 			kprint("LCtrl");
 			break;
-		case 0x1E:
+		case 0x1e:
 			kprint("A");
 			break;
-		case 0x1F:
+		case 0x1f:
 			kprint("S");
 			break;
         case 0x20:
@@ -157,22 +157,22 @@ void _print_letter(uint8_t scancode) {
         case 0x29:
             kprint("`");
             break;
-		case 0x2A:
+		case 0x2a:
 			kprint("LShift");
 			break;
-		case 0x2B:
+		case 0x2b:
 			kprint("\\");
 			break;
-		case 0x2C:
+		case 0x2c:
 			kprint("Z");
 			break;
-		case 0x2D:
+		case 0x2d:
 			kprint("X");
 			break;
-		case 0x2E:
+		case 0x2e:
 			kprint("C");
 			break;
-		case 0x2F:
+		case 0x2f:
 			kprint("V");
 			break;
         case 0x30:
@@ -223,7 +223,7 @@ void _print_letter(uint8_t scancode) {
     }
 }
 
-static void _keyboard_callback(registers_t r) {
+static void _keyboard_callback() {
     uint8_t scancode = port_byte_in(REG_SCANCODE_DATA);
 
     char sc_ascii[256];

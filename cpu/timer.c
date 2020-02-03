@@ -6,7 +6,7 @@
 #include "../kernel/utils.h"
 
 /* Declaration of Private Timer functions */
-static void _timer_callback(registers_t r);
+static void _timer_callback();
 
 /****************************************************************
  * Public Timer functions                                       *
@@ -28,7 +28,7 @@ void init_timer(uint32_t frequency) {
  * Private Timer functions                                      *
  ****************************************************************/
 
-static void _timer_callback(registers_t r) {
+static void _timer_callback() {
     static uint32_t tick = 0;
     tick++;
 
