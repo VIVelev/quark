@@ -1,9 +1,8 @@
 CC = i386-elf-gcc
 LD = i386-elf-ld
-GDB = i386-elf-gdb
 
 CFLAGS = -Wall -Wextra -Werror -pedantic-errors \
-	-std=c11 -nostdlib -ffreestanding -fno-exceptions -m32 -g
+	-std=c11 -nostdlib -ffreestanding -O2 -m32
 
 ASM = nasm
 DISASM = ndisasm
@@ -28,15 +27,6 @@ run: os-image.bin
 kernel.bin: boot/kernel_entry.o $(OBJ)
 	$(LD) $^ --Ttext $(KERNEL_OFFSET) --oformat binary -o $@
 
-# Used for debugging purposes
-kernel.elf: boot/kernel_entry.o $(OBJ)
-	$(LD) $^ --Ttext $(KERNEL_OFFSET) -o $@
-
-# Open the connection to qemu and load our kernel-object file with symbols
-debug: os-image.bin kernel.elf
-	$(EMU) -s --drive file=$<,format=$(FORMAT),if=$(INTERFACE) &
-	$(GDB) -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
-
 # Rule to disassemble the kernel - may be useful to debug
 kernel.dis: kernel.bin
 	$(DISASM) -b 32 $< > $@
@@ -53,5 +43,5 @@ kernel.dis: kernel.bin
 	$(ASM) $< -f bin -o $@
 
 clean:
-	rm -rf *.bin *.dis *.o *.elf
-	rm -rf **/*.bin **/*.dis **/*.o **/*.elf
+	rm -f *.bin *.dis *.o
+	rm -rf **/*.bin **/*.dis **/*.o

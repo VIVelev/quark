@@ -6,7 +6,7 @@
 
 /* Declaration of Private Keyboard functions */
 static void _keyboard_callback();
-static void _print_user_input();
+static void _user_input();
 
 /****************************************************************
  * Public Keyboard functions                                    *
@@ -52,7 +52,7 @@ static void _keyboard_callback() {
         
     }else if (scancode == ENTER_SC) {
         kprint("\n");
-        _print_user_input();
+        _user_input();
         key_buffer[0] = '\0';
 
     }else {
@@ -63,10 +63,14 @@ static void _keyboard_callback() {
     }
 }
 
-static void _print_user_input() {
+static void _user_input() {
     if (strcmp(key_buffer, "END") == 0) {
         kprint("Stopping the CPU. Bye!\n");
         __asm__("hlt");
+    }
+
+    if (strcmp(key_buffer, "CLEAR") == 0) {
+        clear_screen();
     }
 
     kprint("You said: ");

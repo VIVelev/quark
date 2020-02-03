@@ -6,7 +6,7 @@
  * @param n integer
  */
 char * itoa(sint32_t n) {
-    char str[256];
+    static char str[256];
 
     sint32_t sign = n;
     if (sign < 0)
