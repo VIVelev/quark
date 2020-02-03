@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "screen_.h": "c",
-        "utils.h": "c",
-        "interrupt_handling.h": "c",
-        "random": "c",
-        "irq.h": "c"
-    }
-}
