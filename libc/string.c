@@ -44,6 +44,30 @@ char * strrev(char *str) {
 }
 
 /**
+ * Append a character to the end of a string.
+ * 
+ * @param str string
+ * @param c character to append
+ */
+char * strpush(char *str, char c) {
+    uint32_t len = strlen(str);
+    str[len] = c;
+    str[len + 1] = '\0';
+
+    return str;
+}
+
+/**
+ * Deletes the last character of a string.
+ * 
+ * @param str string
+ */
+char * strpop(char *str) {
+    str[strlen(str) - 1] = '\0';
+    return str;
+}
+
+/**
  * Returns the len of a string.
  * 
  * @param str string
@@ -53,4 +77,24 @@ uint32_t strlen(char *str) {
     while (str[i] != '\0') i++;
 
     return i;
+}
+
+/**
+ * K&R strcmp 
+ * Returns:
+ *   < 0 if str1 < str2
+ *   = 0 if str1 == str2
+ *   > 0 if str1 > str2
+ * 
+ * @param str1 string
+ * @param str2 string
+ */
+sint32_t strcmp(char *str1, char *str2) {
+    uint32_t i;
+    for (i = 0; str1[i] == str2[i]; i++) {
+        if (str1[i] == '\0')
+            return 0;
+    }
+
+    return str1[i] - str2[i];
 }

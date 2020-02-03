@@ -15,9 +15,12 @@
     #define CURSOR_HIGH_BYTE_DATA 14
     #define CURSOR_LOW_BYTE_DATA 15
 
+    #define BACKSPACE_ASCII 0x08  /* ASCII Code for backspace */
+
     /* Public Kernel functions */
     void kprint_at(char *message, uint32_t row, uint32_t col);
     void kprint(char *message);
+    void kprint_backspace();
     void clear_screen();
 
 #endif /* SCREEN_H */
