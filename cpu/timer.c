@@ -5,16 +5,12 @@
 #include "../drivers/screen.h"
 #include "../kernel/utils.h"
 
-static void _timer_callback(registers_t r) {
-    static uint32_t tick = 0;
-    tick++;
+/* Declaration of Private Timer functions */
+static void _timer_callback(registers_t r);
 
-    kprint("Tick: ");
-    char tick_ascii[256];
-    int_to_ascii(tick, tick_ascii);
-    kprint(tick_ascii);
-    kprint("\n");
-}
+/****************************************************************
+ * Public Timer functions                                       *
+ ****************************************************************/
 
 void init_timer(uint32_t frequency) {
     register_interrupt_handler(IRQ0, _timer_callback);
@@ -26,4 +22,19 @@ void init_timer(uint32_t frequency) {
     port_byte_out(REG_PIT_CTRL, 0x36);  /* tell the PIT which channel we're setting */
     port_byte_out(REG_PIT_DATA_CHANNEL_0, low);  /* send low byte */
     port_byte_out(REG_PIT_DATA_CHANNEL_0, high);  /* send high byte */
+}
+
+/****************************************************************
+ * Private Timer functions                                      *
+ ****************************************************************/
+
+static void _timer_callback(registers_t r) {
+    static uint32_t tick = 0;
+    tick++;
+
+    kprint("Tick: ");
+    char tick_ascii[256];
+    int_to_ascii(tick, tick_ascii);
+    kprint(tick_ascii);
+    kprint("\n");
 }

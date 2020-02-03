@@ -4,9 +4,21 @@
 #include "../cpu/irq.h"
 #include "../kernel/utils.h"
 
-/* Private keyboard functions */
+/* Declaration of Private Keyboard functions */
 void _print_letter(uint8_t scancode);
 static void _keyboard_callback(registers_t r);
+
+/****************************************************************
+ * Public Keyboard functions                                    *
+ ****************************************************************/
+
+void init_keyboard() {
+   register_interrupt_handler(IRQ1, _keyboard_callback); 
+}
+
+/****************************************************************
+ * Private Keyboard functions                                   *
+ ****************************************************************/
 
 /**
  * The PIC does not send us the ASCII code for the pressed key,
@@ -222,9 +234,4 @@ static void _keyboard_callback(registers_t r) {
     kprint(", ");
     _print_letter(scancode);
     kprint("\n");
-}
-
-/* Public keyboard functions */
-void init_keyboard() {
-   register_interrupt_handler(IRQ1, _keyboard_callback); 
 }
