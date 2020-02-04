@@ -1,5 +1,5 @@
-#ifndef INTERRUPT_HANDLING
-    #define INTERRUPT_HANDLING
+#ifndef HANDLING
+    #define HANDLING
 
     #include "idt.h"
 
@@ -20,4 +20,4 @@
 
     void install_interrupt_handlers();
 
-#endif /* INTERRUPT_HANDLING */
+#endif /* HANDLING */

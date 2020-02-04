@@ -2,18 +2,18 @@
 #include "screen.h"
 #include "../cpu/ports.h"
 #include "../cpu/interrupt/irq.h"
+#include "../kernel/shell.h"
 #include "../libc/string.h"
 
 /* Declaration of Private Keyboard functions */
 static void _keyboard_callback();
-static void _user_input();
 
 /****************************************************************
  * Public Keyboard functions                                    *
  ****************************************************************/
 
 void init_keyboard() {
-   register_interrupt_handler(IRQ1, _keyboard_callback); 
+    register_interrupt_handler(IRQ1, _keyboard_callback); 
 }
 
 /****************************************************************
@@ -45,35 +45,19 @@ static void _keyboard_callback() {
 
     if (scancode > MAX_SC)
         return;
-    
+
     if (scancode == BACKSPACE_SC) {
-        strpop(key_buffer);
         kprint_backspace();
-        
+        strpop(key_buffer);
+
     }else if (scancode == ENTER_SC) {
         kprint("\n");
-        _user_input();
+        evaluate(key_buffer);
         key_buffer[0] = '\0';
 
     }else {
         char str[2] = {sc_ascii[(int) scancode], '\0'};
-        strpush(key_buffer, str[0]);
-
         kprint(str);
+        strpush(key_buffer, str[0]);
     }
-}
-
-static void _user_input() {
-    if (strcmp(key_buffer, "END") == 0) {
-        kprint("Stopping the CPU. Bye!\n");
-        __asm__("hlt");
-    }
-
-    if (strcmp(key_buffer, "CLEAR") == 0) {
-        clear_screen();
-    }
-
-    kprint("You said: ");
-    kprint(key_buffer);
-    kprint("\n> ");
 }
