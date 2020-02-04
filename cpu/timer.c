@@ -32,6 +32,6 @@ static void _timer_callback() {
     static uint32_t tick = 0;
     tick++;
 
-    kprint_at("Tick: ", 1, 66, 1);
-    kprint_at(itoa(tick), 1, 73, 1);
+    kprint_at_colored("Tick: ", 1, 66, 1, light_brown, black);
+    kprint_at_colored(itoa(tick), 1, 73, 1, light_brown, black);
 }

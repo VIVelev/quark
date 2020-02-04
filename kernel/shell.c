@@ -4,7 +4,7 @@
 
 void init_shell() {
     clear_screen();
-    kprint(SHELL_PROMPT);
+    kprint_colored(SHELL_PROMPT, cyan, black);
 }
 
 void evaluate(char *user_input) {
@@ -16,5 +16,5 @@ void evaluate(char *user_input) {
         clear_screen();
     }
 
-    kprint(SHELL_PROMPT);
+    kprint_colored(SHELL_PROMPT, cyan, black);
 }
