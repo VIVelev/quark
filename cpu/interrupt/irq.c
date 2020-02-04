@@ -1,5 +1,5 @@
 #include "irq.h"
-#include "ports.h"
+#include "../ports.h"
 
 void install_irq() {
     /* Remap the PIC */

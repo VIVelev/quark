@@ -1,7 +1,7 @@
 #ifndef IRQ_H
     #define IRQ_H  /* IRQ stands for "Interrupt ReQuest". */
 
-    #include "interrupt_handling.h"
+    #include "handling.h"
 
     #define REG_MASTER_PIC_CTRL 0x20
     #define REG_MASTER_PIC_DATA 0x21

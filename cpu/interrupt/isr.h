@@ -1,7 +1,7 @@
 #ifndef ISR_H
     #define ISR_H  /* ISR stands for "Interrupt Service Routine" */
 
-    #include "interrupt_handling.h"
+    #include "handling.h"
 
     /* ISRs reserved for CPU exceptions */
     extern void isr0();

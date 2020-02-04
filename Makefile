@@ -13,9 +13,9 @@ INTERFACE = floppy
 
 KERNEL_OFFSET = 0x1000
 
-C_SOURCES = $(wildcard cpu/*.c drivers/*.c kernel/*.c libc/*.c)
-HEADERS = $(wildcard cpu/*.h drivers/*.h kernel/*.h libc/*.h)
-OBJ = $(C_SOURCES:.c=.o cpu/interrupt.o)
+C_SOURCES = $(shell find . -name "*.c")
+HEADERS = $(shell find . -name "*.h")
+OBJ = $(C_SOURCES:.c=.o cpu/interrupt/interrupt.o)
 
 
 os-image.bin: boot/bootsect.bin kernel.bin
@@ -43,5 +43,6 @@ kernel.dis: kernel.bin
 	$(ASM) $< -f bin -o $@
 
 clean:
-	rm -f *.bin *.dis *.o
-	rm -rf **/*.bin **/*.dis **/*.o
+	find . -name "*.bin" -type f -delete
+	find . -name "*.dis" -type f -delete
+	find . -name "*.o" -type f -delete

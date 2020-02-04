@@ -1,5 +1,5 @@
 #include "kernel.h"
-#include "../cpu/interrupt_handling.h"
+#include "../cpu/interrupt/handling.h"
 #include "../cpu/timer.h"
 #include "../drivers/keyboard.h"
 

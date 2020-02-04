@@ -1,6 +1,6 @@
 #include "isr.h"
-#include "../drivers/screen.h"
-#include "../libc/string.h"
+#include "../../drivers/screen.h"
+#include "../../libc/string.h"
 
 void install_isr() {
     set_idt_gate(0, (uint32_t) isr0);

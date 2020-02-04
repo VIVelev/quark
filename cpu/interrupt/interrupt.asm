@@ -1,4 +1,4 @@
-; Defined in interrupt_handling.c
+; Defined in handling/handling.c
 [extern handle_interrupt]
 
 ; Common ISR code

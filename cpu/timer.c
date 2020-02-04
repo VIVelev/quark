@@ -1,7 +1,7 @@
 #include "timer.h"
-#include "interrupt_handling.h"
-#include "irq.h"
 #include "ports.h"
+#include "interrupt/handling.h"
+#include "interrupt/irq.h"
 #include "../drivers/screen.h"
 #include "../libc/string.h"
 

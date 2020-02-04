@@ -1,7 +1,7 @@
 #include "keyboard.h"
 #include "screen.h"
-#include "../cpu/irq.h"
 #include "../cpu/ports.h"
+#include "../cpu/interrupt/irq.h"
 #include "../libc/string.h"
 
 /* Declaration of Private Keyboard functions */
