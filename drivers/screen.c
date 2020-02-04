@@ -3,7 +3,7 @@
 #include "../libc/mem.h"
 
 /* Declaration of Private Screen functions */
-static uint32_t _print_char(char ch, uint32_t row, uint32_t col, uint8_t attr);
+static uint32_t _print_char(char ch, uint32_t row, uint32_t col, vga_color_t fg, vga_color_t bg);
 static uint32_t _get_cursor_offset();
 static void _set_cursor_offset(uint32_t offset);
 static uint32_t _get_cursor_offset_on(uint32_t row, uint32_t col);
@@ -30,7 +30,7 @@ void kprint_at(char *message, uint32_t row, uint32_t col, bool save_offset) {
     i = 0;
 
     while (message[i] != '\0') {
-        offset = _print_char(message[i++], row, col, WHITE_ON_BLACK);
+        offset = _print_char(message[i++], row, col, light_grey, black);
         row = _get_cursor_offset_row(offset);
         col  = _get_cursor_offset_col(offset);
     }
@@ -65,7 +65,7 @@ void kprint_backspace() {
     row = _get_cursor_offset_row(offset);
     col = _get_cursor_offset_col(offset);
 
-    _print_char(BACKSPACE_ASCII, row, col, WHITE_ON_BLACK);
+    _print_char(BACKSPACE_ASCII, row, col, light_grey, black);
 }
 
 /**
@@ -77,7 +77,7 @@ void clear_screen() {
 
     for (i = 0; i < screen_size; i++) {
         vidmem[2*i] = ' ';
-        vidmem[2*i + 1] = WHITE_ON_BLACK;
+        vidmem[2*i + 1] = NEW_VGA_COLOR(light_grey, black);
     }
 
     _set_cursor_offset(_get_cursor_offset_on(0, 0));
@@ -94,19 +94,18 @@ void clear_screen() {
  * @param ch character to print
  * @param row row-wise offset
  * @param col col-wise offset
- * @param attr character attribute
+ * @param fg foreground color
+ * @param bg background color
  * 
  * @returns the offset of the next character
  */
-static uint32_t _print_char(char ch, uint32_t row, uint32_t col, uint8_t attr) {
+static uint32_t _print_char(char ch, uint32_t row, uint32_t col, vga_color_t fg, vga_color_t bg) {
     uint8_t *vidmem = (uint8_t *) VIDEO_MEMORY_ADDRESS;
-    if (!attr)
-        attr = WHITE_ON_BLACK;
 
     /* Print a red 'E' if the coords are out of bounds. */
     if (row >= MAX_ROWS || col >= MAX_COLS) {
         vidmem[2 * MAX_ROWS*MAX_COLS - 2] = 'E';
-        vidmem[2 * MAX_ROWS*MAX_COLS - 1] = RED_ON_WHITE;
+        vidmem[2 * MAX_ROWS*MAX_COLS - 1] = NEW_VGA_COLOR(red, white);
         return _get_cursor_offset_on(row, col);
     }
 
@@ -117,11 +116,11 @@ static uint32_t _print_char(char ch, uint32_t row, uint32_t col, uint8_t attr) {
 
     }else if (ch == BACKSPACE_ASCII) {
         vidmem[offset] = ' ';
-        vidmem[offset + 1] = attr;
+        vidmem[offset + 1] = NEW_VGA_COLOR(fg, bg);
 
     }else {
         vidmem[offset] = ch;
-        vidmem[offset + 1] = attr;
+        vidmem[offset + 1] = NEW_VGA_COLOR(fg, bg);
         offset += 2;
     }
 

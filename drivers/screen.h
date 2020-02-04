@@ -1,13 +1,11 @@
 #ifndef SCREEN_H
     #define SCREEN_H
 
-    #include "../cpu/types.h"
+    #include "color.h"
 
     #define VIDEO_MEMORY_ADDRESS 0xb8000
     #define MAX_ROWS 25
     #define MAX_COLS 80
-    #define WHITE_ON_BLACK 0x0f
-    #define RED_ON_WHITE 0xf4
 
     /* Screen I/O Ports */
     #define REG_SCREEN_CTRL 0x3d4
@@ -19,7 +17,13 @@
 
     /* Public Kernel functions */
     void kprint_at(char *message, uint32_t row, uint32_t col, bool save_offset);
+    void kprint_at_colored(char *message, uint32_t row, uint32_t col, bool save_offset,
+                           vga_color_t fg, vga_color_t bg);
+
     void kprint(char *message);
+    void kprint_colored(char *message,
+                        vga_color_t fg, vga_color_t bg);
+
     void kprint_backspace();
     void clear_screen();
 
