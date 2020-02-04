@@ -4,8 +4,8 @@
     #include "color.h"
 
     #define VIDEO_MEMORY_ADDRESS 0xb8000
-    #define MAX_ROWS 25
-    #define MAX_COLS 80
+    #define NUM_ROWS 25
+    #define NUM_COLS 80
 
     /* Screen I/O Ports */
     #define REG_SCREEN_CTRL 0x3d4

@@ -22,9 +22,9 @@ static uint32_t _get_cursor_offset_col(uint32_t offset);
  * @param message string to print
  * @param row integer
  * @param col integer
- * @param save_offset bool
+ * @param retain_offset bool
  */ 
-void kprint_at(char *message, uint32_t row, uint32_t col, bool save_offset) {
+void kprint_at(char *message, uint32_t row, uint32_t col, bool retain_offset) {
     uint32_t saved_offset, offset, i;
     saved_offset = _get_cursor_offset();
     i = 0;
@@ -35,7 +35,36 @@ void kprint_at(char *message, uint32_t row, uint32_t col, bool save_offset) {
         col  = _get_cursor_offset_col(offset);
     }
 
-    if (save_offset)
+    if (retain_offset)
+        _set_cursor_offset(saved_offset);
+}
+
+/**
+ * Colored Kernel Print at given screen position.
+ * 
+ * High-level print function.
+ * 
+ * @param message string to print
+ * @param row integer
+ * @param col integer
+ * @param retain_offset bool
+ * @param fg foreground color
+ * @param bg background color
+ */ 
+void kprint_at_colored(char *message, uint32_t row, uint32_t col, bool retain_offset,
+                       vga_color_t fg, vga_color_t bg) {
+
+    uint32_t saved_offset, offset, i;
+    saved_offset = _get_cursor_offset();
+    i = 0;
+
+    while (message[i] != '\0') {
+        offset = _print_char(message[i++], row, col, fg, bg);
+        row = _get_cursor_offset_row(offset);
+        col  = _get_cursor_offset_col(offset);
+    }
+
+    if (retain_offset)
         _set_cursor_offset(saved_offset);
 }
 
@@ -56,6 +85,24 @@ void kprint(char *message) {
 }
 
 /**
+ * Colored Kernel Print.
+ * 
+ * Prints a message on the screen at the current cursor position.
+ * 
+ * @param message string to print
+ * @param fg foreground color
+ * @param bg background color
+ */
+void kprint_colored(char *message, vga_color_t fg, vga_color_t bg) {
+    uint32_t offset, row, col;
+    offset = _get_cursor_offset();
+    row = _get_cursor_offset_row(offset);
+    col = _get_cursor_offset_col(offset);
+
+    kprint_at_colored(message, row, col, 0, fg, bg);
+}
+
+/**
  * Backspace.
  * Deletes the last character.
  */
@@ -72,7 +119,7 @@ void kprint_backspace() {
  * Screen cleaning utility function.
  */
 void clear_screen() {
-    uint32_t i, screen_size = MAX_ROWS * MAX_COLS;
+    uint32_t i, screen_size = NUM_ROWS * NUM_COLS;
     uint8_t *vidmem = (uint8_t *) VIDEO_MEMORY_ADDRESS;
 
     for (i = 0; i < screen_size; i++) {
@@ -103,9 +150,9 @@ static uint32_t _print_char(char ch, uint32_t row, uint32_t col, vga_color_t fg,
     uint8_t *vidmem = (uint8_t *) VIDEO_MEMORY_ADDRESS;
 
     /* Print a red 'E' if the coords are out of bounds. */
-    if (row >= MAX_ROWS || col >= MAX_COLS) {
-        vidmem[2 * MAX_ROWS*MAX_COLS - 2] = 'E';
-        vidmem[2 * MAX_ROWS*MAX_COLS - 1] = NEW_VGA_COLOR(red, white);
+    if (row >= NUM_ROWS || col >= NUM_COLS) {
+        vidmem[2 * NUM_ROWS*NUM_COLS - 2] = 'E';
+        vidmem[2 * NUM_ROWS*NUM_COLS - 1] = NEW_VGA_COLOR(red, white);
         return _get_cursor_offset_on(row, col);
     }
 
@@ -125,21 +172,21 @@ static uint32_t _print_char(char ch, uint32_t row, uint32_t col, vga_color_t fg,
     }
 
     /* Check if the offset is over the screen size. If it is, then scroll. */
-    if (offset >= 2 * MAX_ROWS * MAX_COLS) {
+    if (offset >= 2 * NUM_ROWS * NUM_COLS) {
         uint32_t i;
 
         /* Scroll */
-        for (i = 1; i < MAX_ROWS;  i++)
+        for (i = 1; i < NUM_ROWS;  i++)
             memcpy(vidmem + _get_cursor_offset_on(i, 0),
                    vidmem + _get_cursor_offset_on(i-1, 0),
-                   2 * MAX_COLS);
+                   2 * NUM_COLS);
 
         /* The new, last line, is blank */
-        uint8_t *last_line = vidmem + _get_cursor_offset_on(MAX_ROWS - 1, 0);
-        for (i = 0; i < 2 * MAX_COLS; i++)
+        uint8_t *last_line = vidmem + _get_cursor_offset_on(NUM_ROWS - 1, 0);
+        for (i = 0; i < 2 * NUM_COLS; i++)
             last_line[i] = '\0';
 
-        offset -= 2 * MAX_COLS;
+        offset -= 2 * NUM_COLS;
     }
 
     _set_cursor_offset(offset);
@@ -192,13 +239,13 @@ static void _set_cursor_offset(uint32_t offset) {
 }
 
 static uint32_t _get_cursor_offset_on(uint32_t row, uint32_t col) {
-    return 2 * (row * MAX_COLS + col);
+    return 2 * (row * NUM_COLS + col);
 }
 
 static uint32_t _get_cursor_offset_row(uint32_t offset) {
-    return offset / (2 * MAX_COLS);
+    return offset / (2 * NUM_COLS);
 }
 
 static uint32_t _get_cursor_offset_col(uint32_t offset) {
-    return (offset - 2 * MAX_COLS * _get_cursor_offset_row(offset)) / 2;
+    return (offset - 2 * NUM_COLS * _get_cursor_offset_row(offset)) / 2;
 }
