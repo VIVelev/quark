@@ -16,12 +16,12 @@
     #define BACKSPACE_ASCII 0x08  /* ASCII Code for backspace */
 
     /* Public Kernel functions */
-    void kprint_at(char *message, uint32_t row, uint32_t col, bool save_offset);
-    void kprint_at_colored(char *message, uint32_t row, uint32_t col, bool save_offset,
+    void kprint_at(const char *message, uint32_t row, uint32_t col, bool save_offset);
+    void kprint_at_colored(const char *message, uint32_t row, uint32_t col, bool save_offset,
                            vga_color_t fg, vga_color_t bg);
 
-    void kprint(char *message);
-    void kprint_colored(char *message,
+    void kprint(const char *message);
+    void kprint_colored(const char *message,
                         vga_color_t fg, vga_color_t bg);
 
     void kprint_backspace();

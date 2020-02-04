@@ -72,7 +72,7 @@ char * strpop(char *str) {
  * 
  * @param str string
  */
-uint32_t strlen(char *str) {
+uint32_t strlen(const char *str) {
     uint32_t i = 0;
     while (str[i] != '\0') i++;
 
@@ -89,7 +89,7 @@ uint32_t strlen(char *str) {
  * @param str1 string
  * @param str2 string
  */
-sint32_t strcmp(char *str1, char *str2) {
+sint32_t strcmp(const char *str1, const char *str2) {
     uint32_t i;
     for (i = 0; str1[i] == str2[i]; i++) {
         if (str1[i] == '\0')

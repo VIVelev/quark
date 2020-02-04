@@ -37,7 +37,7 @@ void install_isr() {
     set_idt_gate(31, (uint32_t) isr31);
 }
 
-char *EXCEPTION_MESSAGES[] = {
+const char *EXCEPTION_MESSAGES[] = {
     "Division By Zero",
     "Debug",
     "Non Maskable Interrupt",

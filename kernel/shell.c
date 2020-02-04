@@ -7,7 +7,7 @@ void init_shell() {
     kprint_colored(SHELL_PROMPT, cyan, black);
 }
 
-void evaluate(char *user_input) {
+void evaluate(const char *user_input) {
     if (strcmp(user_input, "HALT") == 0) {
         kprint("\nStopping the CPU. Bye!\n");
         __asm__("hlt");

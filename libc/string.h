@@ -9,7 +9,7 @@
     char * strpush(char *str, char c);
     char * strpop(char *str);
 
-    uint32_t strlen(char *str);
-    sint32_t strcmp(char *str1, char *str2);
+    uint32_t strlen(const char *str);
+    sint32_t strcmp(const char *str1, const char *str2);
 
 #endif /* STRING_H */
