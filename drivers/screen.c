@@ -22,14 +22,21 @@ static uint32_t _get_cursor_offset_col(uint32_t offset);
  * @param message string to print
  * @param row integer
  * @param col integer
+ * @param save_offset bool
  */ 
-void kprint_at(char *message, uint32_t row, uint32_t col) {
-    uint32_t offset, i = 0;
+void kprint_at(char *message, uint32_t row, uint32_t col, bool save_offset) {
+    uint32_t saved_offset, offset, i;
+    saved_offset = _get_cursor_offset();
+    i = 0;
+
     while (message[i] != '\0') {
         offset = _print_char(message[i++], row, col, WHITE_ON_BLACK);
         row = _get_cursor_offset_row(offset);
         col  = _get_cursor_offset_col(offset);
     }
+
+    if (save_offset)
+        _set_cursor_offset(saved_offset);
 }
 
 /**
@@ -45,7 +52,7 @@ void kprint(char *message) {
     row = _get_cursor_offset_row(offset);
     col = _get_cursor_offset_col(offset);
 
-    kprint_at(message, row, col);
+    kprint_at(message, row, col, 0);
 }
 
 /**

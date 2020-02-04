@@ -8,4 +8,6 @@
     typedef int32_t sint32_t;
     typedef int64_t sint64_t;
 
+    typedef uint8_t bool;
+
 #endif /* TYPES_H */

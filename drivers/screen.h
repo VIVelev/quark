@@ -18,7 +18,7 @@
     #define BACKSPACE_ASCII 0x08  /* ASCII Code for backspace */
 
     /* Public Kernel functions */
-    void kprint_at(char *message, uint32_t row, uint32_t col);
+    void kprint_at(char *message, uint32_t row, uint32_t col, bool save_offset);
     void kprint(char *message);
     void kprint_backspace();
     void clear_screen();
