@@ -12,7 +12,9 @@ void register_command(command_t command) {
 }
 
 void evaluate(const char *user_input) {
-    commands[strhash(user_input, NUM_COMMANDS)].interpreter();
+    cmd_interpreter_t interpreter = commands[strhash(user_input, NUM_COMMANDS)].interpreter;
+
+    if (interpreter) interpreter();
     kprint_colored(SHELL_PROMPT, cyan, black);
 }
 

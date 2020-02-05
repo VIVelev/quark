@@ -99,7 +99,6 @@ sint32_t strcmp(const char *str1, const char *str2) {
     return str1[i] - str2[i];
 }
 
-
 /**
  * Implementation of djb2 hash function.
  * Reference: http://www.cse.yorku.ca/~oz/hash.html
