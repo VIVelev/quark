@@ -1,7 +1,7 @@
 #ifndef TIMER_H
     #define TIMER_H
 
-    #include "types.h"
+    #include "type.h"
 
     /* The PIT contains a crystal oscillator which emits a signal 1193182 hz. */
     #define HARDWARE_PIT_FREQ 1193182

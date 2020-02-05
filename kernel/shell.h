@@ -1,7 +1,7 @@
 #ifndef SHELL_H
     #define SHELL_H
 
-    #include "../cpu/types.h"
+    #include "../cpu/type.h"
 
     #define SHELL_PROMPT "quark> "
     #define NUM_COMMANDS 256

@@ -7,7 +7,7 @@
  * @param dest pointer
  * @param nbytes integer, number of bytes to copy
  */
-void memcpy(uint8_t *src, uint8_t *dest, uint32_t nbytes) {
+void memcpy(const uint8_t *src, uint8_t *dest, uint32_t nbytes) {
     for (uint32_t i = 0; i < nbytes; i++)
         dest[i] = src[i];
 }

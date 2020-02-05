@@ -1,5 +1,5 @@
 #include "screen.h"
-#include "../cpu/ports.h"
+#include "../cpu/port.h"
 #include "../libc/mem.h"
 
 /* Declaration of Private Screen functions */
@@ -25,9 +25,8 @@ static uint32_t _get_cursor_offset_col(uint32_t offset);
  * @param retain_offset bool
  */ 
 void kprint_at(const char *message, uint32_t row, uint32_t col, bool retain_offset) {
-    uint32_t saved_offset, offset, i;
-    saved_offset = _get_cursor_offset();
-    i = 0;
+    const uint32_t saved_offset = _get_cursor_offset();
+    uint32_t offset, i = 0;
 
     while (message[i] != '\0') {
         offset = _print_char(message[i++], row, col, light_grey, black);
@@ -54,9 +53,8 @@ void kprint_at(const char *message, uint32_t row, uint32_t col, bool retain_offs
 void kprint_at_colored(const char *message, uint32_t row, uint32_t col, bool retain_offset,
                        vga_color_t fg, vga_color_t bg) {
 
-    uint32_t saved_offset, offset, i;
-    saved_offset = _get_cursor_offset();
-    i = 0;
+    const uint32_t saved_offset = _get_cursor_offset();
+    uint32_t offset, i = 0;
 
     while (message[i] != '\0') {
         offset = _print_char(message[i++], row, col, fg, bg);
@@ -119,8 +117,10 @@ void kprint_backspace() {
  * Screen cleaning utility function.
  */
 void clear_screen() {
-    uint32_t i, screen_size = NUM_ROWS * NUM_COLS;
+    const uint32_t screen_size = NUM_ROWS * NUM_COLS;
+
     uint8_t *vidmem = (uint8_t *) VIDEO_MEMORY_ADDRESS;
+    uint32_t i;
 
     for (i = 0; i < screen_size; i++) {
         vidmem[2*i] = ' ';

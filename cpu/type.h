@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-    #define TYPES_H
+#ifndef TYPE_H
+    #define TYPE_H
 
     #include <stdint.h>
 
@@ -10,4 +10,4 @@
 
     typedef uint8_t bool;
 
-#endif /* TYPES_H */
+#endif /* TYPE_H */

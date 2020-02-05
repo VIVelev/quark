@@ -1,7 +1,7 @@
 #ifndef COLOR_H
     #define COLOR_H
 
-    #include "../cpu/types.h"
+    #include "../cpu/type.h"
 
     #define NEW_VGA_COLOR(fg, bg) ((uint8_t)(bg) << 4) | ((uint8_t)(fg))
 
