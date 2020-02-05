@@ -2,19 +2,33 @@
 #include "../drivers/screen.h"
 #include "../libc/string.h"
 
-void init_shell() {
-    clear_screen();
-    kprint_colored(SHELL_PROMPT, cyan, black);
+/* TODO: implement hash-map for command_name to command_interpreter */
+
+void register_command(uint16_t index, command_t command) {
+    commands[index] = command;
 }
 
 void evaluate(const char *user_input) {
-    if (strcmp(user_input, "HALT") == 0) {
-        kprint("\nStopping the CPU. Bye!\n");
-        __asm__("hlt");
-
-    }else if (strcmp(user_input, "CLEAR") == 0) {
-        clear_screen();
+    for (uint16_t i = 0; i < 5; i++) {
+        if (strcmp(user_input, commands[i].name) == 0) {
+            commands[i].interpreter();
+            kprint("HELLO");
+            break;
+        }
     }
 
     kprint_colored(SHELL_PROMPT, cyan, black);
+}
+
+void halt_cpu() {
+    kprint("\nStopping the CPU. Bye!\n");
+    __asm__("hlt");
+}
+
+void init_shell() {
+    clear_screen();
+    kprint_colored(SHELL_PROMPT, cyan, black);
+
+    register_command(0, (command_t) {"HALT", halt_cpu});
+    register_command(1, (command_t) {"CLEAR", clear_screen});
 }

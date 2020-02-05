@@ -8,7 +8,7 @@
 char * itoa(sint32_t n) {
     static char str[256];
 
-    sint32_t sign = n;
+    const sint32_t sign = n;
     if (sign < 0)
         n = -n;
 
@@ -50,7 +50,7 @@ char * strrev(char *str) {
  * @param c character to append
  */
 char * strpush(char *str, char c) {
-    uint32_t len = strlen(str);
+    const uint32_t len = strlen(str);
     str[len] = c;
     str[len + 1] = '\0';
 

@@ -38,7 +38,7 @@ void install_irq() {
     set_idt_gate(47, (uint32_t) irq15);
 }
 
-void handle_irq(registers_t *r) {
+void handle_irq(const registers_t *r) {
     /**
      * After every interrupt we need to send an EOI to the PICs
      * or they will not send another interrupt again.

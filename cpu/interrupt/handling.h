@@ -12,11 +12,11 @@
     } registers_t;
 
     /* ISR Handler function type */
-    typedef void (*ihandler_t)(registers_t *);
+    typedef void (*ihandler_t)(const registers_t *);
 
     ihandler_t interrupt_handlers[IDT_ENTRIES];
     void register_interrupt_handler(uint8_t index, ihandler_t handler);
-    void handle_interrupt(registers_t *r);
+    void handle_interrupt(const registers_t *r);
 
     void install_interrupt_handlers();
 

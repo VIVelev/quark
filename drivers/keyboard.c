@@ -41,7 +41,7 @@ const char sc_ascii[] = {
 };
 
 static void _keyboard_callback() {
-    uint8_t scancode = port_byte_in(REG_SCANCODE_DATA);
+    const uint8_t scancode = port_byte_in(REG_SCANCODE_DATA);
 
     if (scancode > MAX_SC)
         return;

@@ -11,7 +11,7 @@ void register_interrupt_handler(uint8_t index, ihandler_t handler) {
  * 
  * @param r accumulated registers
  */
-void handle_interrupt(registers_t *r) {
+void handle_interrupt(const registers_t *r) {
     if (r->int_no < 32)
         handle_isr(r);
     else
