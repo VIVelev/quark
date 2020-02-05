@@ -98,3 +98,21 @@ sint32_t strcmp(const char *str1, const char *str2) {
 
     return str1[i] - str2[i];
 }
+
+
+/**
+ * Implementation of djb2 hash function.
+ * Reference: http://www.cse.yorku.ca/~oz/hash.html
+ * 
+ * @param str string to hash
+ * @param limit integer, the maximum hash value
+ */
+uint32_t strhash(const char *str, uint32_t limit) {
+    uint32_t hash = 5381;
+    char c;
+
+    while ((c = *str++))
+        hash = ((hash << 5) + hash) + c;  /* hash * 33 + c */
+
+    return hash % limit;
+}

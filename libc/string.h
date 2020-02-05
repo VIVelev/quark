@@ -12,4 +12,6 @@
     uint32_t strlen(const char *str);
     sint32_t strcmp(const char *str1, const char *str2);
 
+    uint32_t strhash(const char *str, uint32_t limit);
+
 #endif /* STRING_H */

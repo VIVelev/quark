@@ -14,7 +14,7 @@
     } command_t;
 
     command_t commands[NUM_COMMANDS];
-    void register_command(uint16_t index, command_t command);
+    void register_command(command_t command);
     void evaluate(const char *user_input);
 
     void init_shell();
