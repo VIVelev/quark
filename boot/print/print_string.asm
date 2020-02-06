@@ -2,7 +2,7 @@ print_string:
     pusha
 
 ; keep this in mind:
-; while (string[i] != 0) { print string[i]; i++ }
+; while (string[i] != 0) { print string[i]; ++i}
 
 print_string_loop:
     mov al, [bx]

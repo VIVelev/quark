@@ -47,6 +47,6 @@ void handle_irq(const registers_t *r) {
         port_byte_out(REG_SLAVE_PIC_CTRL, 0x20);  /* slave */
     port_byte_out(REG_MASTER_PIC_CTRL, 0x20);  /* master */
 
-    if (interrupt_handlers[r->int_no] != 0)
+    if (interrupt_handlers[r->int_no])
         interrupt_handlers[r->int_no](r);
 }

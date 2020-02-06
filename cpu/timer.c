@@ -15,9 +15,9 @@ static void _timer_callback();
 void init_timer(uint32_t frequency) {
     register_interrupt_handler(IRQ0, _timer_callback);
 
-    uint32_t divisor = HARDWARE_PIT_FREQ / frequency;
-    uint8_t low  = (uint8_t)(divisor & 0xFF);
-    uint8_t high = (uint8_t)((divisor >> 8) & 0xFF);
+    const uint32_t divisor = HARDWARE_PIT_FREQ / frequency;
+    const uint8_t low  = (uint8_t)(divisor & 0xFF),
+        high = (uint8_t)((divisor >> 8) & 0xFF);
 
     port_byte_out(REG_PIT_CTRL, 0x36);  /* tell the PIT which channel we're setting */
     port_byte_out(REG_PIT_DATA_CHANNEL_0, low);  /* send low byte */
@@ -29,7 +29,7 @@ void init_timer(uint32_t frequency) {
  ****************************************************************/
 
 static void _timer_callback() {
-    tick++;
+    ++tick;
 
     kprint_at_colored("Tick: ", 1, 66, 1, light_brown, black);
     kprint_at_colored(itoa(tick), 1, 73, 1, light_brown, black);

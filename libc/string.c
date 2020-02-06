@@ -12,16 +12,16 @@ char * itoa(sint32_t n) {
     if (sign < 0)
         n = -n;
 
-    uint16_t i = 0;
+    register uint16_t i = -1;
     do {
-        str[i++] = n % 10 + '0';
+        str[++i] = n % 10 + '0';
         n /= 10;
     } while (n > 0);
 
     if (sign < 0)
-        str[i++] = '-';
+        str[++i] = '-';
 
-    str[i] = '\0';
+    str[++i] = '\0';
     return strrev(str);
 }
 
@@ -31,10 +31,10 @@ char * itoa(sint32_t n) {
  * @param str string
  */
 char * strrev(char *str) {
-    uint32_t i, j;
+    register uint32_t i, j;
     char tmp;
 
-    for (i = 0, j = strlen(str) - 1; i < j; i++, j--) {
+    for (i = 0, j = strlen(str) - 1; i < j; ++i, --j) {
         tmp = str[i];
         str[i] = str[j];
         str[j] = tmp;
@@ -73,8 +73,8 @@ char * strpop(char *str) {
  * @param str string
  */
 uint32_t strlen(const char *str) {
-    uint32_t i = 0;
-    while (str[i] != '\0') i++;
+    register uint32_t i = 0;
+    while (str[i] != '\0') ++i;
 
     return i;
 }
@@ -90,8 +90,8 @@ uint32_t strlen(const char *str) {
  * @param str2 string
  */
 sint32_t strcmp(const char *str1, const char *str2) {
-    uint32_t i;
-    for (i = 0; str1[i] == str2[i]; i++) {
+    register uint32_t i;
+    for (i = 0; str1[i] == str2[i]; ++i) {
         if (str1[i] == '\0')
             return 0;
     }
@@ -107,8 +107,8 @@ sint32_t strcmp(const char *str1, const char *str2) {
  * @param limit integer, the maximum hash value
  */
 uint32_t strhash(const char *str, uint32_t limit) {
-    uint32_t hash = 5381;
-    char c;
+    register uint32_t hash = 5381;
+    register char c;
 
     while ((c = *str++))
         hash = ((hash << 5) + hash) + c;  /* hash * 33 + c */
