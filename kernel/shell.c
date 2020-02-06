@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "../drivers/screen.h"
+#include "../libc/string.h"
 #include "../libc/syscalls.h"
 
 void register_command(command_t command) {

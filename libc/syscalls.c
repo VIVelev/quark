@@ -1,4 +1,5 @@
 #include "syscalls.h"
+#include "../drivers/screen.h"
 
 /**
  * Stops the CPU altogether.
