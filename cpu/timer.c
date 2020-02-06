@@ -29,7 +29,6 @@ void init_timer(uint32_t frequency) {
  ****************************************************************/
 
 static void _timer_callback() {
-    static uint32_t tick = 0;
     tick++;
 
     kprint_at_colored("Tick: ", 1, 66, 1, light_brown, black);

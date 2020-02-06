@@ -9,6 +9,7 @@
     #define REG_PIT_CTRL 0x43
     #define REG_PIT_DATA_CHANNEL_0 0x40
 
+    uint32_t tick;
     void init_timer(uint32_t frequency);
 
 #endif /* TIMER_H */
