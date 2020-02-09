@@ -18,7 +18,7 @@ HEADERS = $(shell find . -name "*.h")
 OBJ = $(C_SOURCES:.c=.o cpu/interrupt/interrupt.o)
 
 
-os-image.bin: boot/bootsect.bin kernel.bin
+os-image.bin: boot/bootloader.bin kernel.bin
 	cat $^ > $@
 
 run: os-image.bin
