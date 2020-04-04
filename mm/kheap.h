@@ -1,11 +1,10 @@
 #ifndef KMM_H
 #define KMM_H
 
-#include <stdint.h>
 #include "../cpu/type.h"
 
-#define ZERO_LAST_12 0xFFFFF000
-#define FOUR_KB 0x1000
+#define ZERO_LAST_12_BITS 0xFFFFF000
+#define ALIGNMENT 0x1000 /* 4 KB aligned */
 
 uint32_t placement_address = 0;
 

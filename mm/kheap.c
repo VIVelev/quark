@@ -1,12 +1,12 @@
-#include "kmm.h"
+#include "kheap.h"
 
 uint32_t kmalloc(uint32_t size, bool align, uint32_t *physical_address) {
 
     /* If we have to align the address and it is not aligned */
-    if (align && (placement_address & ZERO_LAST_12)) {
+    if (align && (placement_address & ZERO_LAST_12_BITS)) {
         /* Align it */
-        placement_address &= ZERO_LAST_12;
-        placement_address += FOUR_KB;
+        placement_address &= ZERO_LAST_12_BITS;
+        placement_address += ALIGNMENT;
     }
 
     /* Get the physical_address of the memory allocated */
