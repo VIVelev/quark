@@ -25,5 +25,5 @@ void memcpy(const uint8_t *src, uint8_t *dest, uint32_t nbytes) {
 void memset(uint8_t *dest, uint8_t val, uint32_t nbytes) {
     register uint8_t *ptr;
     for (ptr = dest; ptr < dest + nbytes; ++ptr)
-            *ptr = val;
+        *ptr = val;
 }

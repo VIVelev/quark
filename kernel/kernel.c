@@ -1,8 +1,8 @@
 #include "kernel.h"
-#include "shell.h"
 #include "../cpu/interrupt/handling.h"
 #include "../cpu/timer.h"
 #include "../drivers/keyboard.h"
+#include "shell.h"
 
 void kmain() {
     /* Enable interrupts */

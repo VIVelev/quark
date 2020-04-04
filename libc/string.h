@@ -1,17 +1,17 @@
 #ifndef STRING_H
-    #define STRING_H
+#define STRING_H
 
-    #include "../cpu/type.h"
+#include "../cpu/type.h"
 
-    char * itoa(sint32_t n);
+char *itoa(sint32_t n);
 
-    char * strrev(char *str);
-    char * strpush(char *str, char c);
-    char * strpop(char *str);
+char *strrev(char *str);
+char *strpush(char *str, char c);
+char *strpop(char *str);
 
-    uint32_t strlen(const char *str);
-    sint32_t strcmp(const char *str1, const char *str2);
+uint32_t strlen(const char *str);
+sint32_t strcmp(const char *str1, const char *str2);
 
-    uint32_t strhash(const char *str, uint32_t limit);
+uint32_t strhash(const char *str, uint32_t limit);
 
 #endif /* STRING_H */

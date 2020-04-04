@@ -5,7 +5,7 @@
  * 
  * @param n integer
  */
-char * itoa(sint32_t n) {
+char *itoa(sint32_t n) {
     static char str[256];
 
     const sint32_t sign = n;
@@ -30,7 +30,7 @@ char * itoa(sint32_t n) {
  * 
  * @param str string
  */
-char * strrev(char *str) {
+char *strrev(char *str) {
     register uint32_t i, j;
     char tmp;
 
@@ -49,7 +49,7 @@ char * strrev(char *str) {
  * @param str string
  * @param c character to append
  */
-char * strpush(char *str, char c) {
+char *strpush(char *str, char c) {
     const uint32_t len = strlen(str);
     str[len] = c;
     str[len + 1] = '\0';
@@ -62,7 +62,7 @@ char * strpush(char *str, char c) {
  * 
  * @param str string
  */
-char * strpop(char *str) {
+char *strpop(char *str) {
     str[strlen(str) - 1] = '\0';
     return str;
 }
@@ -74,7 +74,8 @@ char * strpop(char *str) {
  */
 uint32_t strlen(const char *str) {
     register uint32_t i = 0;
-    while (str[i] != '\0') ++i;
+    while (str[i] != '\0')
+        ++i;
 
     return i;
 }
@@ -111,7 +112,7 @@ uint32_t strhash(const char *str, uint32_t limit) {
     register char c;
 
     while ((c = *str++))
-        hash = ((hash << 5) + hash) + c;  /* hash * 33 + c */
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
     return hash % limit;
 }

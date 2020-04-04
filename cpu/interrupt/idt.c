@@ -11,7 +11,9 @@ void set_idt_gate(uint8_t index, uint32_t handler) {
 
 void set_idt() {
     idt_reg.limit = (uint16_t)(IDT_ENTRIES * sizeof(idt_gate_t) - 1);
-    idt_reg.base = (uint32_t) &idt;
+    idt_reg.base = (uint32_t)&idt;
     /* Don't make the mistake of loading `&idt`, always load `&idt_reg`. */
-    __asm__("lidtl (%0)" : : "r" (&idt_reg));
+    __asm__("lidtl (%0)"
+            :
+            : "r"(&idt_reg));
 }

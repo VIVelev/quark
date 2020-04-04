@@ -1,6 +1,6 @@
 #include "handling.h"
-#include "isr.h"
 #include "irq.h"
+#include "isr.h"
 
 void register_interrupt_handler(uint8_t index, ihandler_t handler) {
     interrupt_handlers[index] = handler;

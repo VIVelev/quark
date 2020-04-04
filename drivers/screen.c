@@ -23,7 +23,7 @@ static uint32_t _get_cursor_offset_col(uint32_t offset);
  * @param row integer
  * @param col integer
  * @param retain_offset bool
- */ 
+ */
 void kprint_at(const char *message, uint32_t row, uint32_t col, bool retain_offset) {
     const uint32_t saved_offset = _get_cursor_offset();
     register uint32_t offset, i = -1;
@@ -31,7 +31,7 @@ void kprint_at(const char *message, uint32_t row, uint32_t col, bool retain_offs
     while (message[++i] != '\0') {
         offset = _print_char(message[i], row, col, light_grey, black);
         row = _get_cursor_offset_row(offset);
-        col  = _get_cursor_offset_col(offset);
+        col = _get_cursor_offset_col(offset);
     }
 
     if (retain_offset)
@@ -49,7 +49,7 @@ void kprint_at(const char *message, uint32_t row, uint32_t col, bool retain_offs
  * @param retain_offset bool
  * @param fg foreground color
  * @param bg background color
- */ 
+ */
 void kprint_at_colored(const char *message, uint32_t row, uint32_t col, bool retain_offset,
                        vga_color_t fg, vga_color_t bg) {
 
@@ -59,7 +59,7 @@ void kprint_at_colored(const char *message, uint32_t row, uint32_t col, bool ret
     while (message[++i] != '\0') {
         offset = _print_char(message[i], row, col, fg, bg);
         row = _get_cursor_offset_row(offset);
-        col  = _get_cursor_offset_col(offset);
+        col = _get_cursor_offset_col(offset);
     }
 
     if (retain_offset)
@@ -75,8 +75,8 @@ void kprint_at_colored(const char *message, uint32_t row, uint32_t col, bool ret
  */
 void kprint(const char *message) {
     const uint32_t offset = _get_cursor_offset(),
-        row = _get_cursor_offset_row(offset),
-        col = _get_cursor_offset_col(offset);
+                   row = _get_cursor_offset_row(offset),
+                   col = _get_cursor_offset_col(offset);
 
     kprint_at(message, row, col, 0);
 }
@@ -92,8 +92,8 @@ void kprint(const char *message) {
  */
 void kprint_colored(const char *message, vga_color_t fg, vga_color_t bg) {
     const uint32_t offset = _get_cursor_offset(),
-        row = _get_cursor_offset_row(offset),
-        col = _get_cursor_offset_col(offset);
+                   row = _get_cursor_offset_row(offset),
+                   col = _get_cursor_offset_col(offset);
 
     kprint_at_colored(message, row, col, 0, fg, bg);
 }
@@ -104,8 +104,8 @@ void kprint_colored(const char *message, vga_color_t fg, vga_color_t bg) {
  */
 void kprint_backspace() {
     const uint32_t offset = _get_cursor_offset() - 2,
-        row = _get_cursor_offset_row(offset),
-        col = _get_cursor_offset_col(offset);
+                   row = _get_cursor_offset_row(offset),
+                   col = _get_cursor_offset_col(offset);
 
     _print_char(BACKSPACE_ASCII, row, col, light_grey, black);
 }
@@ -116,12 +116,12 @@ void kprint_backspace() {
 void clear_screen() {
     const uint32_t screen_size = NUM_ROWS * NUM_COLS;
 
-    uint8_t *vidmem = (uint8_t *) VIDEO_MEMORY_ADDRESS;
+    uint8_t *vidmem = (uint8_t *)VIDEO_MEMORY_ADDRESS;
     register uint32_t i;
 
     for (i = 0; i < screen_size; ++i) {
-        vidmem[2*i] = ' ';
-        vidmem[2*i + 1] = NEW_VGA_COLOR(light_grey, black);
+        vidmem[2 * i] = ' ';
+        vidmem[2 * i + 1] = NEW_VGA_COLOR(light_grey, black);
     }
 
     _set_cursor_offset(_get_cursor_offset_on(0, 0));
@@ -144,12 +144,12 @@ void clear_screen() {
  * @returns the offset of the next character
  */
 static uint32_t _print_char(char ch, uint32_t row, uint32_t col, vga_color_t fg, vga_color_t bg) {
-    uint8_t *vidmem = (uint8_t *) VIDEO_MEMORY_ADDRESS;
+    uint8_t *vidmem = (uint8_t *)VIDEO_MEMORY_ADDRESS;
 
     /* Print a red 'E' if the coords are out of bounds. */
     if (row >= NUM_ROWS || col >= NUM_COLS) {
-        vidmem[2 * NUM_ROWS*NUM_COLS - 2] = 'E';
-        vidmem[2 * NUM_ROWS*NUM_COLS - 1] = NEW_VGA_COLOR(red, white);
+        vidmem[2 * NUM_ROWS * NUM_COLS - 2] = 'E';
+        vidmem[2 * NUM_ROWS * NUM_COLS - 1] = NEW_VGA_COLOR(red, white);
         return _get_cursor_offset_on(row, col);
     }
 
@@ -158,11 +158,11 @@ static uint32_t _print_char(char ch, uint32_t row, uint32_t col, vga_color_t fg,
         row = _get_cursor_offset_row(offset);
         offset = _get_cursor_offset_on(row + 1, 0);
 
-    }else if (ch == BACKSPACE_ASCII) {
+    } else if (ch == BACKSPACE_ASCII) {
         vidmem[offset] = ' ';
         vidmem[offset + 1] = NEW_VGA_COLOR(fg, bg);
 
-    }else {
+    } else {
         vidmem[offset] = ch;
         vidmem[offset + 1] = NEW_VGA_COLOR(fg, bg);
         offset += 2;
