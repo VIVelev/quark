@@ -1,4 +1,5 @@
 #include "frames.h"
+#include "../drivers/screen.h"
 #include "kheap.h"
 
 /**
@@ -70,4 +71,35 @@ uint32_t get_first_free_frame() {
     }
 
     return (uint32_t)-1;
+}
+
+void alloc_frame(page_t *page, bool is_kernel, bool is_writeable) {
+    if (page->frame) {
+        /* Frame already allocated */
+        return;
+
+    } else {
+        uint32_t frame = get_first_free_frame();
+        if (frame == (uint32_t)-1) {
+            kprint("No free frame!\n");
+        }
+
+        set_frame(frame * ALIGNMENT);
+        page->present = 1;
+        page->rw = is_writeable ? 1 : 0;
+        page->user = is_kernel ? 0 : 1;
+        page->frame = frame;
+    }
+}
+
+void free_frame(page_t *page) {
+    uint32_t frame;
+
+    if (!(frame = page->frame)) {
+        /* The page doesn't have a frame */
+        return;
+    } else {
+        clear_frame(frame * ALIGNMENT);
+        page->frame = 0x0;
+    }
 }
